@@ -63,6 +63,9 @@ flutter:
     - images/men.svg
     - images/women.svg
     - images/camera.svg
+    - images/Rate.svg
+    - images/star.svg
+    - images/search.svg
 
     - images/image.jpg
 

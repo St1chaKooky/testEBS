@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:test_ebs/screens/product_screen.dart';
+import 'package:test_ebs/utils/colors.dart';
 import 'package:test_ebs/utils/screen_size.dart';
 
 class CardWidget extends StatelessWidget {
@@ -6,10 +8,17 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).textTheme;
+
     double width = ScreenSize.screenWidth(context);
     double heightPicture = width / 1.5625;
     double widthPicture = width / 2.28;
-    return Container(
+    return InkWell(
+      highlightColor: backgroundColor,
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProductPage()),
+      ),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -25,12 +34,21 @@ class CardWidget extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Text('Title'),
-            Text('leading'),
+            Text(
+              'Nike Dri-Fit',
+              style: theme.bodyMedium,
+            ),
+            Text(
+              'leading',
+              style: theme.labelSmall,
+            ),
             const SizedBox(
               height: 4,
             ),
-            Text("\323")
+            Text(
+              "\$323",
+              style: theme.labelMedium,
+            )
           ]),
     );
   }

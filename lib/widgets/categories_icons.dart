@@ -10,6 +10,8 @@ class IconSVG extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).textTheme;
+
     return Container(
       width: 60,
       height: 90,
@@ -40,7 +42,10 @@ class IconSVG extends StatelessWidget {
           const SizedBox(
             height: 14,
           ),
-          Text(title)
+          Text(
+            title,
+            style: theme.bodySmall,
+          )
         ],
       ),
     );

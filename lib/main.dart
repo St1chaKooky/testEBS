@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_ebs/screens/main_screen.dart';
 import 'package:test_ebs/screens/product_screen.dart';
+import 'package:test_ebs/utils/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +19,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: baseTheme,
       home: MainPage(),
     );
   }

@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
 class TextFieldInput extends StatelessWidget {
-  final bool isPassword;
   final TextInputType textInputType;
 
   const TextFieldInput({
     super.key,
-    this.isPassword = false,
     required this.textInputType,
   });
 
@@ -16,6 +14,7 @@ class TextFieldInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
+        prefixIcon: Icon(Icons.search),
         fillColor: fieldColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(45), // Закругление границы
@@ -24,7 +23,7 @@ class TextFieldInput extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius:
-              BorderRadius.circular(8.0), // Закругление границы при фокусе
+              BorderRadius.circular(45), // Закругление границы при фокусе
           borderSide:
               BorderSide.none, // Убираем границу, оставляя только закругления
         ),
@@ -32,7 +31,6 @@ class TextFieldInput extends StatelessWidget {
         contentPadding: const EdgeInsets.all(12),
       ),
       keyboardType: textInputType,
-      obscureText: isPassword,
     );
   }
 }

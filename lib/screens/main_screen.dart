@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:test_ebs/utils/colors.dart';
 import 'package:test_ebs/utils/screen_size.dart';
-import 'package:test_ebs/widgets/card.dart';
+import 'package:test_ebs/widgets/card_product.dart';
 import 'package:test_ebs/widgets/categories_icons.dart';
 import 'package:test_ebs/widgets/textField.dart';
 
@@ -18,15 +18,16 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     double width = ScreenSize.screenWidth(context);
     double widthPadding = width / 23.4375;
-
+    final theme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: backgroundColor,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            surfaceTintColor: backgroundColor,
+            foregroundColor: backgroundColor,
             pinned: false,
-            snap: true,
-            floating: true,
+            floating: false,
             backgroundColor: backgroundColor,
             elevation: 0,
             bottom: PreferredSize(
@@ -72,7 +73,10 @@ class _MainPageState extends State<MainPage> {
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(left: widthPadding, bottom: 18),
-              child: Text('Categories'),
+              child: Text(
+                'Categories',
+                style: theme.titleSmall,
+              ),
             ),
           ),
           SliverToBoxAdapter(
@@ -123,13 +127,16 @@ class _MainPageState extends State<MainPage> {
             child: Padding(
               padding:
                   EdgeInsets.symmetric(vertical: 44, horizontal: widthPadding),
-              child: const Column(
+              child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Best Selling'),
-                      Text('See all'),
+                      Text(
+                        'Best Selling',
+                        style: theme.titleSmall,
+                      ),
+                      Text('See all', style: theme.bodyMedium),
                     ],
                   ),
                   SizedBox(
@@ -149,24 +156,41 @@ class _MainPageState extends State<MainPage> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(left: widthPadding, bottom: 28, top: 44),
-              child: Text('Categories'),
+              padding: EdgeInsets.only(left: widthPadding, bottom: 28),
+              child: Text(
+                'More to Explore',
+                style: theme.titleSmall,
+              ),
             ),
           ),
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: widthPadding),
             sliver: SliverList.builder(
               itemCount: 3,
-              itemBuilder: (context, index) => Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CardWidget(),
-                  CardWidget(),
-                ],
-              ),
+              itemBuilder: (context, index) => const MoreToExploreWidget(),
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class MoreToExploreWidget extends StatelessWidget {
+  const MoreToExploreWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(bottom: 28),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CardWidget(),
+          CardWidget(),
         ],
       ),
     );
