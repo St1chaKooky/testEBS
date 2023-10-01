@@ -4,15 +4,19 @@ import 'package:test_ebs/utils/colors.dart';
 import 'package:test_ebs/utils/methods.dart';
 
 class CardWidget extends StatelessWidget {
+  final int id;
   final String name;
   final String leading;
-  final String price;
+  final double price;
+  final String src;
 
   const CardWidget(
       {super.key,
+      required this.src,
       required this.leading,
       required this.name,
-      required this.price});
+      required this.price,
+      required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +47,8 @@ class CardWidget extends StatelessWidget {
                   height: heightPicture,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
-                    color: Colors.grey,
                   ),
+                  child: Image.network(src),
                 ),
                 const SizedBox(
                   height: 8,
@@ -54,14 +58,14 @@ class CardWidget extends StatelessWidget {
                   style: theme.bodyMedium,
                 ),
                 Text(
-                  leading,
+                  '$leading...',
                   style: theme.labelSmall,
                 ),
                 const SizedBox(
                   height: 4,
                 ),
                 Text(
-                  price,
+                  '\$${price.toInt()}',
                   style: theme.labelMedium,
                 )
               ]),

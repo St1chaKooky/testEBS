@@ -1,0 +1,18 @@
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:test_ebs/domain/api/api.dart';
+import 'package:test_ebs/models/product_id/response_product_id.dart';
+
+part 'id_product_event.dart';
+part 'id_product_state.dart';
+
+class IdProductBloc extends Bloc<IdProductEvent, IdProductState> {
+  IdProductBloc() : super(IdProductInitial()) {
+    on<LoadIdProduct>((event, emit) async {
+      final listId = await ApiBestProduct().getProduct();
+      final productIdList = await ApiIdProduct(listId: listId).getProduct();
+      print(productIdList);
+      emit(IdProductLoaded(productIdList: productIdList));
+    });
+  }
+}
