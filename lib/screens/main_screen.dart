@@ -1,11 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:test_ebs/api/api.dart';
+import 'package:test_ebs/bloc/category_bloc.dart';
 import 'package:test_ebs/utils/colors.dart';
 import 'package:test_ebs/utils/screen_size.dart';
 import 'package:test_ebs/widgets/card_product.dart';
 import 'package:test_ebs/widgets/categories_icons.dart';
 import 'package:test_ebs/widgets/textField.dart';
 
+@RoutePage()
 class MainPage extends StatefulWidget {
   MainPage({super.key});
 
@@ -14,6 +19,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final _blocCategory = CategoryBloc(ApiCategories());
+  @override
+  void initState() {
+    super.initState();
+    _blocCategory.add(LoadCategory());
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = ScreenSize.screenWidth(context);
@@ -79,49 +91,38 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: widthPadding,
+          BlocBuilder<CategoryBloc, CategoryState>(
+            bloc: _blocCategory,
+            builder: (context, state) {
+              if (state is CategoryLoaded) {
+                final categoryLenght = state.categoryModel.count;
+                final listCategories = state.categoryModel.results;
+                return SliverToBoxAdapter(
+                  child: Container(
+                    height: 95,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categoryLenght,
+                        itemBuilder: (context, index) {
+                          final title =
+                              truncateString(listCategories![index].name!);
+                          return IconSVG(
+                            svg: listCategories[index].icon!,
+                            title: title,
+                          );
+                        }),
                   ),
-                  IconSVG(
-                    svg: 'images/men.svg',
-                    title: 'Men',
+                );
+              }
+              return SliverToBoxAdapter(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: primaryColor,
                   ),
-                  const SizedBox(
-                    width: 18,
-                  ),
-                  IconSVG(
-                    svg: 'images/women.svg',
-                    title: 'Women',
-                  ),
-                  const SizedBox(
-                    width: 18,
-                  ),
-                  IconSVG(
-                    svg: 'images/devices.svg',
-                    title: 'Devices',
-                  ),
-                  const SizedBox(
-                    width: 18,
-                  ),
-                  IconSVG(
-                    svg: 'images/gadgets.svg',
-                    title: 'Gadgets',
-                  ),
-                  const SizedBox(
-                    width: 18,
-                  ),
-                  IconSVG(
-                    svg: 'images/gaming.svg',
-                    title: 'Gaming',
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -173,6 +174,20 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
     );
+  }
+
+  String truncateString(String input) {
+    final List<String> delimiters = [' ', '&', ','];
+    int minIndex = input.length;
+
+    for (final delimiter in delimiters) {
+      final index = input.indexOf(delimiter);
+      if (index != -1 && index < minIndex) {
+        minIndex = index;
+      }
+    }
+
+    return input.substring(0, minIndex);
   }
 }
 

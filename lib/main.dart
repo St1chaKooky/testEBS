@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test_ebs/screens/main_screen.dart';
-import 'package:test_ebs/screens/product_screen.dart';
+import 'package:test_ebs/router/router.dart';
+
 import 'package:test_ebs/utils/theme.dart';
 
 void main() {
@@ -15,12 +15,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _router = AppRouter();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: baseTheme,
-      home: MainPage(),
+      routerConfig: _router.config(),
     );
   }
 }

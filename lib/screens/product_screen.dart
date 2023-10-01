@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:test_ebs/utils/colors.dart';
@@ -6,6 +7,7 @@ import 'package:test_ebs/widgets/bottom_add_widget.dart';
 import 'package:test_ebs/widgets/product_parametrs.dart';
 import 'package:test_ebs/widgets/review_list.dart';
 
+@RoutePage()
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
 
