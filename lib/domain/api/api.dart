@@ -74,11 +74,11 @@ class ApiBestProduct {
   }
 }
 
-class ApiIdProduct {
+class ApiIdBestProduct {
   List listId;
   Dio dio = Dio();
 
-  ApiIdProduct({required this.listId});
+  ApiIdBestProduct({required this.listId});
 
   Future<List<ResponseProductId>> getProduct() async {
     List<ResponseProductId> products = [];
@@ -94,5 +94,27 @@ class ApiIdProduct {
     }
     print(products);
     return products;
+  }
+}
+
+class ApiIdProduct {
+  int id;
+  Dio dio = Dio();
+
+  ApiIdProduct({required this.id});
+
+  Future<ResponseProductId> getProduct() async {
+    try {
+      String url = 'http://mobile-shop-api.hiring.devebs.net/products/$id';
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        final product = ResponseProductId.fromJson(responseData);
+        return product;
+      }
+    } catch (err) {
+      print('Error ApiIdProduct ${err}');
+    }
+    return ResponseProductId();
   }
 }

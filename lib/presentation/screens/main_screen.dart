@@ -12,7 +12,7 @@ import 'package:test_ebs/presentation/widgets/card_product.dart';
 import 'package:test_ebs/presentation/widgets/categories_icons.dart';
 import 'package:test_ebs/presentation/widgets/textField.dart';
 
-import '../../domain/bloc/product_bloc/product_bloc_bloc.dart';
+import '../../domain/bloc/product_more_bloc/product_bloc_bloc.dart';
 
 @RoutePage()
 class MainPage extends StatefulWidget {
@@ -25,7 +25,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final _blocCategory = CategoryBloc(ApiCategories());
   final _blocProduct = ProductBloc(ApiProduct());
-  final _blocBestProduct = IdProductBloc();
+  final _blocBestProduct = IdProductSellBloc();
 
   @override
   void initState() {
@@ -156,7 +156,7 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
           ),
-          BlocBuilder<IdProductBloc, IdProductState>(
+          BlocBuilder<IdProductSellBloc, IdProductState>(
             bloc: _blocBestProduct,
             builder: (context, state) {
               if (state is IdProductLoaded) {

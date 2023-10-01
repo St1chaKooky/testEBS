@@ -3,7 +3,9 @@ import 'package:test_ebs/utils/colors.dart';
 import 'package:test_ebs/utils/methods.dart';
 
 class ProductParametrs extends StatefulWidget {
-  const ProductParametrs({super.key});
+  final size;
+  final color;
+  const ProductParametrs({super.key, this.size, this.color});
 
   @override
   State<ProductParametrs> createState() => _ProductParametrsState();
@@ -20,7 +22,7 @@ class _ProductParametrsState extends State<ProductParametrs> {
 
     final theme = Theme.of(context).textTheme;
 
-    return SliverToBoxAdapter(
+    return Container(
       child: Padding(
         padding: EdgeInsets.only(
             right: widthPadding, left: widthPadding, top: 28 - widthPadding),
@@ -28,12 +30,14 @@ class _ProductParametrsState extends State<ProductParametrs> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _Parametr(
+              size: widget.size,
               widthParametr: widthParametr,
               heightParametr: heightParametr,
               theme: theme,
               widthPadding: widthPadding,
             ),
             _ParametrColor(
+              color: widget.color,
               widthParametr: widthParametr,
               heightParametr: heightParametr,
               theme: theme,
@@ -47,12 +51,14 @@ class _ProductParametrsState extends State<ProductParametrs> {
 }
 
 class _ParametrColor extends StatelessWidget {
+  final color;
   const _ParametrColor({
     super.key,
     required this.widthParametr,
     required this.heightParametr,
     required this.theme,
     required this.widthPadding,
+    this.color,
   });
   final double widthPadding;
 
@@ -84,25 +90,32 @@ class _ParametrColor extends StatelessWidget {
             ),
             Padding(
                 padding: EdgeInsets.only(right: widthPadding),
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: selectProductColor),
-                ))
+                child: Text(
+                  color,
+                  style: theme.bodyLarge,
+                )
+                // Container(
+                //   width: 20,
+                //   height: 20,
+                //   decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(8),
+                //       color: selectProductColor),
+                // )
+                )
           ],
         ));
   }
 }
 
 class _Parametr extends StatelessWidget {
+  final size;
   const _Parametr({
     super.key,
     required this.widthParametr,
     required this.heightParametr,
     required this.theme,
     required this.widthPadding,
+    this.size,
   });
   final double widthPadding;
 
@@ -135,7 +148,7 @@ class _Parametr extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(right: widthPadding),
               child: Text(
-                'XL',
+                size,
                 style: theme.bodyLarge,
               ),
             )

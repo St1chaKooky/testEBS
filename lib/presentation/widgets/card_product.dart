@@ -1,9 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:test_ebs/presentation/screens/product_screen.dart';
+import 'package:test_ebs/router/router.dart';
 import 'package:test_ebs/utils/colors.dart';
 import 'package:test_ebs/utils/methods.dart';
 
-class CardWidget extends StatelessWidget {
+class CardWidget extends StatefulWidget {
   final int id;
   final String name;
   final String leading;
@@ -18,6 +19,11 @@ class CardWidget extends StatelessWidget {
       required this.price,
       required this.id});
 
+  @override
+  State<CardWidget> createState() => _CardWidgetState();
+}
+
+class _CardWidgetState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
@@ -34,10 +40,9 @@ class CardWidget extends StatelessWidget {
         ),
         InkWell(
           highlightColor: backgroundColor,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProductPage()),
-          ),
+          onTap: () {
+            AutoRouter.of(context).push(ProductRoute(id: widget.id));
+          },
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -48,24 +53,24 @@ class CardWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: Image.network(src),
+                  child: Image.network(widget.src),
                 ),
                 const SizedBox(
                   height: 8,
                 ),
                 Text(
-                  name,
+                  widget.name,
                   style: theme.bodyMedium,
                 ),
                 Text(
-                  '$leading...',
+                  '${widget.leading}...',
                   style: theme.labelSmall,
                 ),
                 const SizedBox(
                   height: 4,
                 ),
                 Text(
-                  '\$${price.toInt()}',
+                  '\$${widget.price.toInt()}',
                   style: theme.labelMedium,
                 )
               ]),

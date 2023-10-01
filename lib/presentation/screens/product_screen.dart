@@ -1,82 +1,202 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:test_ebs/domain/bloc/id_product/id_product_bloc.dart';
 import 'package:test_ebs/utils/colors.dart';
 import 'package:test_ebs/utils/methods.dart';
 import 'package:test_ebs/presentation/widgets/bottom_add_widget.dart';
 import 'package:test_ebs/presentation/widgets/product_parametrs.dart';
-import 'package:test_ebs/presentation/widgets/review_list.dart';
 
 @RoutePage()
-class ProductPage extends StatelessWidget {
-  const ProductPage({super.key});
+class ProductPage extends StatefulWidget {
+  final id;
+  const ProductPage({super.key, required this.id});
+
+  @override
+  State<ProductPage> createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
+  late IdProductBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = IdProductBloc(widget.id);
+    _bloc.add(LoadIdProduct()); // Передаем id в IdProductBloc при инициализации
+  }
 
   @override
   Widget build(BuildContext context) {
-    double height = ScreenSizeHeight.screenWidth(context);
     double width = ScreenSize.screenWidth(context);
     double widthPadding = width / 23.4375;
-    double heightPicture = height / 1.691;
     final theme = Theme.of(context).textTheme;
-    return Scaffold(
-      body: Stack(children: [
-        CustomScrollView(slivers: [
-          AppBar(heightPicture: heightPicture),
-          SliverToBoxAdapter(
-            child: SizedBox(height: widthPadding),
-          ),
-          NameProduct(widthPadding: widthPadding, theme: theme),
-          ProductParametrs(),
-          DetailsWidget(widthPadding: widthPadding),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(left: widthPadding, top: 44),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Reviews',
-                    style: theme.titleSmall,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text('Write your', style: theme.headlineMedium),
-                ],
-              ),
+    return BlocBuilder<IdProductBloc, IdProductState>(
+      bloc: _bloc,
+      builder: (context, state) {
+        if (state is IdProductLoaded) {
+          final name = state.productId.name;
+          final details = state.productId.details;
+          final image = state.productId.mainImage;
+          final size = state.productId.size;
+          final color = state.productId.colour;
+          final reviewsList = state.productId.reviews;
+          return Scaffold(
+            body: Stack(
+              children: [
+                CustomScrollView(
+                  slivers: [
+                    AppBar(
+                      image: image,
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: widthPadding),
+                    ),
+                    NameProduct(
+                      title: name,
+                    ),
+                    SliverToBoxAdapter(
+                        child: ProductParametrs(
+                      size: size,
+                      color: color,
+                    )),
+                    DetailsWidget(
+                      details: details,
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: widthPadding, top: 44),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Reviews',
+                              style: theme.titleSmall,
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text('Write your', style: theme.headlineMedium),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverList.builder(
+                      itemBuilder: (context, index) {
+                        final firstName = reviewsList[index].firstName;
+                        final lastName = reviewsList[index].lastName;
+                        final message = reviewsList[index].message;
+                        final image = reviewsList[index].image;
+
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              top: 32, left: widthPadding, right: widthPadding),
+                          child: Container(
+                            width: double.infinity,
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 46,
+                                    height: 46,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: primaryColor,
+                                    ),
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        image!,
+                                        fit: BoxFit
+                                            .cover, // Устанавливаем, чтобы изображение заполняло весь круг
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 32,
+                                    ),
+                                    child: Container(
+                                      width: 265,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('$firstName $lastName'),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 96,
+                                                    height: 18,
+                                                    color: Colors.amber,
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 16,
+                                          ),
+                                          Text(message!)
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ]),
+                          ),
+                        );
+                      },
+                      itemCount: reviewsList!.length,
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 112,
+                      ),
+                    )
+                  ],
+                ),
+                BottomAdd(theme: theme),
+              ],
+            ),
+          );
+        }
+        return SliverToBoxAdapter(
+          child: Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: primaryColor,
             ),
           ),
-          Reviews(widthPadding: widthPadding),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 112,
-            ),
-          )
-        ]),
-        BottomAdd(theme: theme),
-      ]),
+        );
+      },
     );
   }
 }
 
 class NameProduct extends StatelessWidget {
+  final title;
+
   const NameProduct({
     super.key,
-    required this.widthPadding,
-    required this.theme,
+    this.title,
   });
-
-  final double widthPadding;
-  final TextTheme theme;
 
   @override
   Widget build(BuildContext context) {
+    double width = ScreenSize.screenWidth(context);
+    double widthPadding = width / 23.4375;
+    final theme = Theme.of(context).textTheme;
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
             bottom: widthPadding, left: widthPadding, right: widthPadding),
         child: Text(
-          'Nike Dri-Fit Long Sleeve',
+          title,
           style: theme.titleMedium,
         ),
       ),
@@ -85,12 +205,11 @@ class NameProduct extends StatelessWidget {
 }
 
 class AppBar extends StatelessWidget {
+  final image;
   const AppBar({
     super.key,
-    required this.heightPicture,
+    this.image,
   });
-
-  final double heightPicture;
 
   @override
   Widget build(BuildContext context) {
@@ -116,27 +235,26 @@ class AppBar extends StatelessWidget {
             color: textBlacColor // Цвет кнопки
             ),
       ],
-      flexibleSpace: const FlexibleSpaceBar(
+      flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.none,
-        background:
-            Image(image: AssetImage('images/image.jpg'), fit: BoxFit.cover),
+        background: Image(image: NetworkImage(image), fit: BoxFit.cover),
       ),
     );
   }
 }
 
 class DetailsWidget extends StatelessWidget {
+  final details;
   const DetailsWidget({
     super.key,
-    required this.widthPadding,
+    this.details,
   });
-
-  final double widthPadding;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
-
+    double width = ScreenSize.screenWidth(context);
+    double widthPadding = width / 23.4375;
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
@@ -152,8 +270,7 @@ class DetailsWidget extends StatelessWidget {
           SizedBox(
             height: widthPadding,
           ),
-          Text(
-              'ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'),
+          Text(details),
           SizedBox(
             height: 8,
           ),
