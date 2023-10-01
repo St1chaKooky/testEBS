@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:test_ebs/utils/colors.dart';
-import 'package:test_ebs/utils/screen_size.dart';
-import 'package:test_ebs/widgets/bottom_add_widget.dart';
-import 'package:test_ebs/widgets/product_parametrs.dart';
-import 'package:test_ebs/widgets/review_list.dart';
+import 'package:test_ebs/utils/methods.dart';
+import 'package:test_ebs/presentation/widgets/bottom_add_widget.dart';
+import 'package:test_ebs/presentation/widgets/product_parametrs.dart';
+import 'package:test_ebs/presentation/widgets/review_list.dart';
 
 @RoutePage()
 class ProductPage extends StatelessWidget {

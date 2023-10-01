@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_ebs/utils/colors.dart';
-import 'package:test_ebs/utils/screen_size.dart';
+import 'package:test_ebs/utils/methods.dart';
 
 // ignore: must_be_immutable
 class IconSVG extends StatelessWidget {
@@ -18,7 +18,7 @@ class IconSVG extends StatelessWidget {
         SizedBox(
           width: widthPadding,
         ),
-        Container(
+        SizedBox(
           width: 65,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,12 +41,12 @@ class IconSVG extends StatelessWidget {
                 child: Center(
                   child: Image.network(
                     svg,
-                    width: 27,
-                    height: 27,
+                    width: 28,
+                    height: 28,
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 14,
               ),
               Flexible(

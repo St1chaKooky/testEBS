@@ -2,13 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:test_ebs/api/api.dart';
-import 'package:test_ebs/bloc/category_bloc.dart';
+import 'package:test_ebs/domain/api/api.dart';
+import 'package:test_ebs/domain/bloc/category_bloc/category_bloc.dart';
+
 import 'package:test_ebs/utils/colors.dart';
-import 'package:test_ebs/utils/screen_size.dart';
-import 'package:test_ebs/widgets/card_product.dart';
-import 'package:test_ebs/widgets/categories_icons.dart';
-import 'package:test_ebs/widgets/textField.dart';
+import 'package:test_ebs/utils/methods.dart';
+import 'package:test_ebs/presentation/widgets/card_product.dart';
+import 'package:test_ebs/presentation/widgets/categories_icons.dart';
+import 'package:test_ebs/presentation/widgets/textField.dart';
+
+import '../../domain/bloc/product_bloc/product_bloc_bloc.dart';
 
 @RoutePage()
 class MainPage extends StatefulWidget {
@@ -20,10 +23,13 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final _blocCategory = CategoryBloc(ApiCategories());
+  final _blocProduct = ProductBloc(ApiProduct());
+
   @override
   void initState() {
     super.initState();
     _blocCategory.add(LoadCategory());
+    _blocProduct.add(LoadProduct());
   }
 
   @override
@@ -126,8 +132,8 @@ class _MainPageState extends State<MainPage> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding:
-                  EdgeInsets.symmetric(vertical: 44, horizontal: widthPadding),
+              padding: EdgeInsets.only(
+                  top: 44, left: widthPadding, right: widthPadding),
               child: Column(
                 children: [
                   Row(
@@ -143,33 +149,68 @@ class _MainPageState extends State<MainPage> {
                   SizedBox(
                     height: 28,
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CardWidget(),
-                      CardWidget(),
-                    ],
-                  ),
                 ],
               ),
             ),
           ),
           SliverToBoxAdapter(
+            child: Container(
+                height: 337,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => CardWidget(
+                    leading: 'asasa',
+                    name: 'ASasaASSA',
+                    price: '645',
+                  ),
+                  itemCount: 4,
+                )),
+          ),
+          const SliverToBoxAdapter(
+            child: SizedBox(
+              height: 44,
+            ),
+          ),
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(left: widthPadding, bottom: 28),
+              padding: EdgeInsets.only(
+                left: widthPadding,
+              ),
               child: Text(
                 'More to Explore',
                 style: theme.titleSmall,
               ),
             ),
           ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: widthPadding),
-            sliver: SliverList.builder(
-              itemCount: 3,
-              itemBuilder: (context, index) => const MoreToExploreWidget(),
-            ),
+          BlocBuilder<ProductBloc, ProductBlocState>(
+            bloc: _blocProduct,
+            builder: (context, state) {
+              if (state is ProductLoaded) {
+                final results = state.products.results!;
+                return SliverList.builder(
+                  itemCount: results.length,
+                  itemBuilder: (context, index) {
+                    final product = results[index];
+                    final name = product.name ??
+                        "No Name"; // Замените "No Name" на значение по умолчанию
+                    return CardWidget(
+                      leading: 'dsds',
+                      name: name,
+                      price: 'sasa',
+                    );
+                  },
+                );
+              }
+
+              return SliverToBoxAdapter(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: primaryColor,
+                  ),
+                ),
+              );
+            },
           )
         ],
       ),
@@ -188,26 +229,5 @@ class _MainPageState extends State<MainPage> {
     }
 
     return input.substring(0, minIndex);
-  }
-}
-
-class MoreToExploreWidget extends StatelessWidget {
-  const MoreToExploreWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(bottom: 28),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CardWidget(),
-          CardWidget(),
-        ],
-      ),
-    );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_ebs/utils/colors.dart';
-import 'package:test_ebs/utils/screen_size.dart';
+import 'package:test_ebs/utils/methods.dart';
 
 class ProductParametrs extends StatefulWidget {
   const ProductParametrs({super.key});

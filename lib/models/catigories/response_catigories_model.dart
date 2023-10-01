@@ -1,4 +1,4 @@
-import 'package:test_ebs/models/products/product_model.dart';
+import 'package:test_ebs/models/catigories/category_model.dart';
 
 class ResponseCatigories {
   int? count;

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:test_ebs/api/api.dart';
-import 'package:test_ebs/models/catigories/response_catigories.dart';
+import 'package:test_ebs/domain/api/api.dart';
+import 'package:test_ebs/models/catigories/response_catigories_model.dart';
 
 part 'category_event.dart';
 part 'category_state.dart';
