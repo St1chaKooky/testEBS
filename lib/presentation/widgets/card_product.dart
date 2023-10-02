@@ -97,14 +97,14 @@ class _CardWidgetState extends State<CardWidget> {
                       onPressed: () {
                         setState(() {
                           f = !f;
+                          HiveModel(
+                            id: widget.id,
+                            name: widget.name,
+                            leading: widget.leading,
+                            price: widget.price,
+                            imge: widget.src,
+                          ).addProduct();
                         });
-                        HiveModel(
-                          id: widget.id,
-                          name: widget.name,
-                          leading: widget.leading,
-                          price: widget.price,
-                          imge: widget.src,
-                        ).addProduct();
                       },
                       icon: f
                           ? SvgPicture.asset(

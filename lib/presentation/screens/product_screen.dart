@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:test_ebs/domain/bloc/id_product/id_product_bloc.dart';
+import 'package:test_ebs/presentation/widgets/star.dart';
 import 'package:test_ebs/utils/colors.dart';
 import 'package:test_ebs/utils/methods.dart';
 import 'package:test_ebs/presentation/widgets/bottom_add_widget.dart';
@@ -88,7 +89,9 @@ class _ProductPageState extends State<ProductPage> {
                         final lastName = reviewsList[index].lastName;
                         final message = reviewsList[index].message;
                         final image = reviewsList[index].image;
-
+                        final rating = reviewsList[index].rating;
+                        List<Widget> stars =
+                            List.generate(rating!, (index) => Star());
                         return Padding(
                           padding: EdgeInsets.only(
                               top: 32, left: widthPadding, right: widthPadding),
@@ -128,13 +131,7 @@ class _ProductPageState extends State<ProductPage> {
                                             children: [
                                               Text('$firstName $lastName'),
                                               Row(
-                                                children: [
-                                                  Container(
-                                                    width: 96,
-                                                    height: 18,
-                                                    color: Colors.amber,
-                                                  ),
-                                                ],
+                                                children: stars,
                                               )
                                             ],
                                           ),
