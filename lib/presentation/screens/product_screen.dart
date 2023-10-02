@@ -231,7 +231,11 @@ class AppBar extends StatelessWidget {
             onPressed: () {
               // Обработчик для дополнительной кнопки
             },
-            icon: SvgPicture.asset('images/Rate.svg'),
+            icon: SvgPicture.asset(
+              'images/Rate.svg',
+              width: 40,
+              height: 40,
+            ),
             color: textBlacColor // Цвет кнопки
             ),
       ],

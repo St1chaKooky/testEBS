@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:test_ebs/router/router.dart';
-
 import 'package:test_ebs/utils/theme.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
   runApp(const MyApp());
 }
 
