@@ -45,8 +45,6 @@ class _MainPageState extends State<MainPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            surfaceTintColor: backgroundColor,
-            foregroundColor: backgroundColor,
             pinned: false,
             floating: false,
             backgroundColor: backgroundColor,

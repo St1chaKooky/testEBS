@@ -33,143 +33,173 @@ class _ProductPageState extends State<ProductPage> {
     double width = ScreenSize.screenWidth(context);
     double widthPadding = width / 23.4375;
     final theme = Theme.of(context).textTheme;
-    return BlocBuilder<IdProductBloc, IdProductState>(
-      bloc: _bloc,
-      builder: (context, state) {
-        if (state is IdProductLoaded) {
-          final name = state.productId.name;
-          final details = state.productId.details;
-          final image = state.productId.mainImage;
-          final size = state.productId.size;
-          final color = state.productId.colour;
-          final reviewsList = state.productId.reviews;
-          return Scaffold(
-            body: Stack(
-              children: [
-                CustomScrollView(
-                  slivers: [
-                    AppBar(
-                      image: image,
-                    ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: widthPadding),
-                    ),
-                    NameProduct(
-                      title: name,
-                    ),
-                    SliverToBoxAdapter(
-                        child: ProductParametrs(
-                      size: size,
-                      color: color,
-                    )),
-                    DetailsWidget(
-                      details: details,
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: widthPadding, top: 44),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Reviews',
-                              style: theme.titleSmall,
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text('Write your', style: theme.headlineMedium),
-                          ],
+    return Scaffold(
+      body: Container(
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                BlocBuilder<IdProductBloc, IdProductState>(
+                    bloc: _bloc,
+                    builder: (context, state) {
+                      if (state is IdProductLoaded) {
+                        final image = state.productId.mainImage;
+
+                        return AppBarImage(
+                          image: image,
+                        );
+                      }
+                      return SliverToBoxAdapter(
+                        child: SizedBox(height: 10),
+                      );
+                    }),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: widthPadding),
+                ),
+                // NameProduct(
+                //   title: name,
+                // ),
+                BlocBuilder<IdProductBloc, IdProductState>(
+                    bloc: _bloc,
+                    builder: (context, state) {
+                      if (state is IdProductLoaded) {
+                        final size = state.productId.size;
+                        final color = state.productId.colour;
+
+                        return SliverToBoxAdapter(
+                            child: ProductParametrs(
+                          size: size,
+                          color: color,
+                        ));
+                      }
+                      return const SliverToBoxAdapter(child: SizedBox());
+                    }),
+                BlocBuilder<IdProductBloc, IdProductState>(
+                    bloc: _bloc,
+                    builder: (context, state) {
+                      if (state is IdProductLoaded) {
+                        final details = state.productId.details;
+
+                        return DetailsWidget(
+                          details: details,
+                        );
+                      }
+                      return const SliverToBoxAdapter(child: SizedBox());
+                    }),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: widthPadding, top: 44),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Reviews',
+                          style: theme.titleSmall,
                         ),
-                      ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text('Write your', style: theme.headlineMedium),
+                      ],
                     ),
-                    SliverList.builder(
-                      itemBuilder: (context, index) {
-                        final firstName = reviewsList[index].firstName;
-                        final lastName = reviewsList[index].lastName;
-                        final message = reviewsList[index].message;
-                        final image = reviewsList[index].image;
-                        final rating = reviewsList[index].rating;
-                        List<Widget> stars =
-                            List.generate(rating!, (index) => Star());
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              top: 32, left: widthPadding, right: widthPadding),
-                          child: Container(
-                            width: double.infinity,
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 46,
-                                    height: 46,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: primaryColor,
-                                    ),
-                                    child: ClipOval(
-                                      child: Image.network(
-                                        image!,
-                                        fit: BoxFit
-                                            .cover, // Устанавливаем, чтобы изображение заполняло весь круг
+                  ),
+                ),
+                BlocBuilder<IdProductBloc, IdProductState>(
+                    bloc: _bloc,
+                    builder: (context, state) {
+                      if (state is IdProductLoaded) {
+                        final reviewsList = state.productId.reviews;
+                        return SliverList.builder(
+                          itemBuilder: (context, index) {
+                            final firstName = reviewsList[index].firstName;
+                            final lastName = reviewsList[index].lastName;
+                            final message = reviewsList[index].message;
+                            final image = reviewsList[index].image;
+                            final rating = reviewsList[index].rating;
+                            List<Widget> stars =
+                                List.generate(rating!, (index) => Star());
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  top: 32,
+                                  left: widthPadding,
+                                  right: widthPadding),
+                              child: Container(
+                                width: double.infinity,
+                                child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 46,
+                                        height: 46,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: primaryColor,
+                                        ),
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            image!,
+                                            fit: BoxFit
+                                                .cover, // Устанавливаем, чтобы изображение заполняло весь круг
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 32,
-                                    ),
-                                    child: Container(
-                                      width: 265,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 32,
+                                        ),
+                                        child: Container(
+                                          width: 265,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Text('$firstName $lastName'),
                                               Row(
-                                                children: stars,
-                                              )
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text('$firstName $lastName'),
+                                                  Row(
+                                                    children: stars,
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 16,
+                                              ),
+                                              Text(message!)
                                             ],
                                           ),
-                                          SizedBox(
-                                            height: 16,
-                                          ),
-                                          Text(message!)
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ]),
-                          ),
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                            );
+                          },
+                          itemCount: reviewsList!.length,
                         );
-                      },
-                      itemCount: reviewsList!.length,
-                    ),
-                    const SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 112,
-                      ),
-                    )
-                  ],
-                ),
-                BottomAdd(theme: theme),
+                      }
+                      return SliverToBoxAdapter(
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: primaryColor,
+                          ),
+                        ),
+                      );
+                    }),
+                // const SliverToBoxAdapter(
+                //   child: SizedBox(
+                //     height: 112,
+                //   ),
+                // )
               ],
             ),
-          );
-        }
-        return SliverToBoxAdapter(
-          child: Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: primaryColor,
-            ),
-          ),
-        );
-      },
+            BottomAdd(theme: theme),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -201,9 +231,9 @@ class NameProduct extends StatelessWidget {
   }
 }
 
-class AppBar extends StatelessWidget {
+class AppBarImage extends StatelessWidget {
   final image;
-  const AppBar({
+  const AppBarImage({
     super.key,
     this.image,
   });
@@ -213,7 +243,6 @@ class AppBar extends StatelessWidget {
     return SliverAppBar(
       expandedHeight: 480,
       pinned: false,
-      floating: false,
       collapsedHeight: 200,
       toolbarHeight: 200,
       leading: IconButton(

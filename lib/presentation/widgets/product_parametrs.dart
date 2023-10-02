@@ -148,11 +148,18 @@ class _Parametr extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(right: widthPadding),
               child: Text(
-                size,
+                truncateString(size, 10),
                 style: theme.bodyLarge,
               ),
             )
           ],
         ));
+  }
+
+  String truncateString(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + '...';
   }
 }
